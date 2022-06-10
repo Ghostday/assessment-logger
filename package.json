@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "exceljs": "^4.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.41"
   }
 }
