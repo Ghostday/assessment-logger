@@ -1,8 +1,10 @@
 {
   "dependencies": {
-    "exceljs": "^4.3.0"
+    "exceljs": "^4.3.0",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.3"
   },
   "devDependencies": {
-    "@types/node": "^17.0.41"
+    "@types/node": "^17.0.42"
   }
 }
