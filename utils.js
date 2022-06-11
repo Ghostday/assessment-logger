@@ -4,9 +4,14 @@ const isSheet = function (file) {
     }
 };
 
-export const filesWanted = function (folderPath) {
+const filesWanted = (folderPath) => {
     const files = fs.readdirSync(folderPath).map(function (filename) {
         return path.join(folderPath, filename);
     }).filter(isSheet);
     return files;
 };
+
+module.exports = {
+    filesWanted
+}
+
