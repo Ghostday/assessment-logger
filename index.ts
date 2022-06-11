@@ -2,53 +2,49 @@ import fs from 'fs';
 import path from 'path';
 import ExcelJS from 'exceljs'
 
-import { filesWanted } from './utils';
-import {Student} from './student';
+import { Student, Sheet } from './student';
 
+const template = "./data/template.csv"
 const folderOfFiles = "./data";
 
-async function grabData(folder: string) {
-  let files = filesWanted(folder);
-  files.forEach(async (file: string) => {
-    let studName = file.split("\\")[1]
-    studName = studName.substring(0, studName.length - 5)
+async function grabData(sheet: Sheet) {
+  sheet.students.forEach(async (stud: Student) => {
+    let fileToFind = path.join(folderOfFiles, `${stud.fullName}.xlsx`)
 
-    let stud = new Student('blah', studName, "yo")
-
-    const workbook = await new ExcelJS.Workbook().xlsx.readFile(file)
-    const sheet = workbook.getWorksheet("Summary")
-    const rows = sheet.findRows(3, 10)
-    const colCount = sheet.actualColumnCount
+    const workbook = await new ExcelJS.Workbook().xlsx.readFile(fileToFind)
+    const workSheet = workbook.getWorksheet("Summary")
+    const rows = workSheet.findRows(3, 10)
+    const colCount = workSheet.actualColumnCount
 
     rows!.forEach(row => {
       let skill = row.values[1]
       for (let i = 2; i <= colCount; i++) {
         if (row.values[i].result) {
           let result = row.values[i].result
-          let weekNo = (i-1) * 2
-          
-          console.log(stud)
+          let weekNo = (i - 1) * 2
+          let assessmentLine = `Week ${weekNo} - Soft Skills - ${skill}`
+          stud.addLine(assessmentLine, result)
           console.log(skill, weekNo, row.values[i].result)
-
         }
       }
     })
 
-    // grabResults(sheet)
+    console.log(stud.lines)
+
   })
 }
 
-
-
-function grabResults(sheet) {
-  sheet.findRows(3, 10).forEach(row => {
-    let bsm = row.values[1]
-    
-  
+function resultsNeeded(file: string) {
+  let sheet = new Sheet()
+  const contents = fs.readFileSync(file).toLocaleString().split('\n')
+  contents.forEach(line => {
+    if (line.startsWith('a1g')) {
+      sheet.newStudent(line)
+    }
   })
-  
-
+  return sheet
 }
 
-grabData(folderOfFiles)
+const students = resultsNeeded(template)
+grabData(students)
 
