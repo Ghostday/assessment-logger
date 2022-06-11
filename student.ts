@@ -2,31 +2,35 @@ export class Student {
     studentId: string;
     firstName: string;
     lastName: string;
+    lines: string[];
     
     constructor(studentId: string, firstName: string, lastName: string) {
         this.studentId = studentId
         this.firstName = firstName;
         this.lastName = lastName;
+        this.lines = [];
     }
 
-    results = {
-        "Personal Responsibility": [],
-        "Growth Mindset": [],
-        "Future Orientation": [],
-        "Persistence": [],
-        "Communication": [],
-        "Teamwork": [],
-        "Proactiveness": [],
-        "Adaptability": [],
+    
+    get fullName():string {
+        return `${this.firstName} ${this.lastName}`
+    }
+    
+
+    addLine(assessment: string, score: number) {
+        let finalString = `${this.studentId},${this.firstName},${this.lastName},${assessment},${score}\n`
+        this.lines.push(finalString)
     }
 
 }
 
 export class Sheet {
     students: Array<Student>
+    lines: Array<string>
 
     constructor() {
         this.students = [];
+        this.lines = [];
     }
 
     newStudent(csvString: string) {
@@ -37,5 +41,10 @@ export class Sheet {
         let s = new Student(id, first, last);
         this.students.push(s)
     }
+
+    addLine(week: string, skill: string, student: string ) {
+
+    }
+
 
 }
