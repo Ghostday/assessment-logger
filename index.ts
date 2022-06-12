@@ -8,9 +8,9 @@ const template = "./data/template.csv"
 const folderOfFiles = "./data";
 
 async function grabData(sheet: Sheet) {
-  sheet.students.forEach(async (stud: Student) => {
+  for (const stud of sheet.students) {
     let fileToFind = path.join(folderOfFiles, `${stud.fullName}.xlsx`)
-
+    
     const workbook = await new ExcelJS.Workbook().xlsx.readFile(fileToFind)
     const workSheet = workbook.getWorksheet("Summary")
     const rows = workSheet.findRows(3, 10)
@@ -28,8 +28,7 @@ async function grabData(sheet: Sheet) {
         }
       }
     })
-
-  })
+  }
 
 }
 
