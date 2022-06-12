@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as ExcelJS from 'exceljs'
+const prompt = require('prompt-sync')();
 
 import { Student, Sheet } from './student';
 
@@ -8,10 +9,12 @@ const template = "./data/template.csv"
 const folderOfFiles = "./data";
 
 async function grabData(sheet: Sheet) {
+  process.stdout.write('Loading...\n')
   for (const stud of sheet.students) {
-    let fileToFind = path.join(folderOfFiles, `${stud.fullName}.xlsx`)
-    
+    const fileToFind = path.join(folderOfFiles, `${stud.fullName}.xlsx`)
     const workbook = await new ExcelJS.Workbook().xlsx.readFile(fileToFind)
+    process.stdout.write(`Found ${fileToFind}\n`)
+
     const workSheet = workbook.getWorksheet("Summary")
     const rows = workSheet.findRows(3, 10)
     const colCount = workSheet.actualColumnCount
@@ -30,6 +33,7 @@ async function grabData(sheet: Sheet) {
     })
   }
 
+  exportCSV(sheet)
 }
 
 function resultsNeeded(file: string) {
@@ -43,6 +47,17 @@ function resultsNeeded(file: string) {
   return sheet
 }
 
+function exportCSV(sheet) {
+  fs.writeFile('./test.csv', sheet.finalizeLines(), function (err) {
+    if (err) {
+      console.log(err)
+    }
+    else {
+      console.log('done')
+    }
+  })
+}
+
+
 const students = resultsNeeded(template)
 grabData(students)
-
