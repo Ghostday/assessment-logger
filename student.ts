@@ -18,7 +18,7 @@ export class Student {
     
 
     addLine(assessment: string, score: number) {
-        let finalString = `${this.studentId},${this.firstName},${this.lastName},${assessment},${score}\n`
+        let finalString = `${this.studentId},${this.firstName},${this.lastName},${assessment},${score}`
         this.lines.push(finalString)
     }
 
@@ -46,10 +46,13 @@ export class Sheet {
         this.students.forEach(student => {
             this.lines.push(...student.lines)
         })
-        console.log(this.lines)
-        console.log("all lines printed")
-        return this.lines
     }
 
+    finalizeLines() {
+        this.grabAllLines()
+        const header = `Learner ID,First Name,Last Name,Assessment,Score\n`
+        const data = this.lines.join("\n")
+        return `${header}${data}`
+    }
 
 }
