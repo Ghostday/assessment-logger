@@ -1,6 +1,6 @@
-import fs from 'fs';
-import path from 'path';
-import ExcelJS from 'exceljs'
+import * as fs from 'fs';
+import * as path from 'path';
+import * as ExcelJS from 'exceljs'
 
 import { Student, Sheet } from './student';
 
@@ -29,9 +29,8 @@ async function grabData(sheet: Sheet) {
       }
     })
 
-    console.log(stud.lines)
-
   })
+
 }
 
 function resultsNeeded(file: string) {

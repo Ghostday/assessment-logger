@@ -42,8 +42,13 @@ export class Sheet {
         this.students.push(s)
     }
 
-    addLine(week: string, skill: string, student: string ) {
-
+    grabAllLines() {
+        this.students.forEach(student => {
+            this.lines.push(...student.lines)
+        })
+        console.log(this.lines)
+        console.log("all lines printed")
+        return this.lines
     }
 
 
